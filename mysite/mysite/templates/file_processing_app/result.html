@@ -1,0 +1,127 @@
+<!--
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Processing Result</title>
+</head>
+<body>
+    <h1>File Processing Result</h1>
+    <p>{{ result_message }}</p>
+</body>
+</html>
+-->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Processing Result</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #000000, #111111); /* Background gradient */
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative; /* Required for bubbles to stay in the body */
+        }
+
+        h1 {
+            font-size: 24px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            text-align: center;
+        }
+        .falling-characters {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .falling-characters div {
+            position: absolute;
+            opacity: 0.9; /* Opacity set to 30% */
+            animation: fall 0.5s linear infinite; /* Falling animation */
+            color:  #00FF00; /* Hacker green color */
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="centered-content">
+        <div class="falling-characters">
+            <!-- JavaScript will add falling characters here -->
+    
+        </div>
+   
+    <!-- Display different images based on the result -->
+    {% if result_message == 'Safe File' %}
+        <audio autoplay loop>
+            <source src="{% static 'audio/Ldog.wav' %}" type="audio/wav">
+        </audio>
+        <img src="{% static 'images/Ldog.gif' %}" alt="Success Image" width="200">      
+    {% elif result_message == 'Corrupted File but not highly vulnerable' %}
+        <audio autoplay loop>
+            <source src="{% static 'audio/Cdog.wav' %}" type="audio/wav">
+        </audio>
+        <img src="{% static 'images/Cdog.gif' %}" alt="Failure Image" width="200">
+    {% else %}
+        <audio autoplay loop>
+            <source src="{% static 'audio/Fdog.wav' %}" type="audio/wav">
+        </audio>
+        <img src="{% static 'images/Fdog.gif' %}" alt="Unknown Image" width="200">
+    {% endif %}
+    <p>{{ result_message }}</p>
+</div>
+<script>
+    const charactersContainer = document.querySelector('.falling-characters');
+
+function createFallingText() {
+const text = document.createElement('div');
+text.textContent = getRandomCharacter();
+text.classList.add('falling-text');
+text.style.left = `${getRandomPosition()}%`;
+text.style.animationDuration = `${getRandomDuration()}s`; // Randomize animation duration
+charactersContainer.appendChild(text);
+text.addEventListener('animationiteration', () => {
+    charactersContainer.removeChild(text);
+    createFallingText();
+});
+}
+
+function getRandomCharacter() {
+const characters = 'Dogsarefaithfully';
+return characters[Math.floor(Math.random() * characters.length)];
+}
+
+function getRandomPosition() {
+return Math.random() * 100;
+}
+
+function getRandomDuration() {
+// Randomize animation duration between 2s and 4s
+return (Math.random() * 2) + 2;
+}
+
+// Create falling characters at intervals
+setInterval(createFallingText, 300);
+</script>
+</body>
+</html>

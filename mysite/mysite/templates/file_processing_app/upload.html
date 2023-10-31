@@ -1,0 +1,141 @@
+<!--
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Processing</title>
+</head>
+<body>
+    <h1>Upload a File</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="uploaded_file">
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>
+-->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload</title>
+    <style>
+        body {
+            background: white; /* Black background */
+            color: white; /* White text */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .falling-characters {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+
+        .falling-characters div {
+            position: absolute;
+            opacity: 0.9; /* Opacity set to 30% */
+            animation: fall 0.5s linear infinite; /* Falling animation */
+            color: red; /* Hacker green color */
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh);
+            }
+            100% {
+                transform: translateY(100vh);
+            }
+        }
+
+        input[type="file"], button {
+            background: #000; /* Black background for text and buttons */
+            color: white; /* White text */
+            border: 10px solid white; /* White borders */
+            padding: 10px;
+            margin: 10px;
+            display: inline block;
+            width: 200px;
+            opacity: 0.7;
+            text-align: center; /* Center-align text */
+        }
+
+        input[type="file"], button {
+            opacity: 1; /* Full opacity for file input and button */
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .logo {
+            display: block;
+            margin: 0;/* Center the logo horizontally */
+            width: 350px; /* Adjust the width as needed */
+            height: 300px; /* Automatically adjust the height while maintaining aspect ratio */
+        }
+
+    </style>
+</head>
+<body>
+    <div class="falling-characters">
+        <!-- JavaScript will add falling characters here -->
+
+    </div>
+
+    <div>
+        
+        <img src="{% static 'images/logo.gif' %}" alt="Logo" width="350" style="margin-left: 70px"> <!-- Add your logo image path here -->
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="uploaded_file">
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+
+    <script>
+                const charactersContainer = document.querySelector('.falling-characters');
+
+        function createFallingText() {
+            const text = document.createElement('div');
+            text.textContent = getRandomCharacter();
+            text.classList.add('falling-text');
+            text.style.left = `${getRandomPosition()}%`;
+            text.style.animationDuration = `${getRandomDuration()}s`; // Randomize animation duration
+            charactersContainer.appendChild(text);
+            text.addEventListener('animationiteration', () => {
+                charactersContainer.removeChild(text);
+                createFallingText();
+            });
+        }
+
+        function getRandomCharacter() {
+            const characters = 'Dogsarefaithfully';
+            return characters[Math.floor(Math.random() * characters.length)];
+        }
+
+        function getRandomPosition() {
+            return Math.random() * 100;
+        }
+
+        function getRandomDuration() {
+            // Randomize animation duration between 2s and 4s
+            return (Math.random() * 2) + 2;
+        }
+
+        // Create falling characters at intervals
+        setInterval(createFallingText, 300);
+    </script>
+</body>
+</html>
